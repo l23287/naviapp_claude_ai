@@ -34,10 +34,10 @@ export default function TrainerProUI() {
   ]);
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-slate-900 to-blue-900 text-white">
-      <aside className="w-64 bg-slate-900/80 p-6 flex flex-col justify-between">
+    <div className="flex min-h-screen bg-background text-foreground">
+      <aside className="w-64 bg-card/80 border-r border-border p-6 flex flex-col justify-between">
         <div>
-          <div className="flex items-center gap-3 text-xl font-semibold mb-8">
+          <div className="flex items-center gap-3 text-xl mb-8 font-display">
             <img src="/trainerzone-logo.png" alt="TrainerZone Logo" className="h-8 w-auto" />
             <span>TrainerPro</span>
           </div>
@@ -86,17 +86,17 @@ function PlansPage({ sport, setPage, setActivePlan, plans, setPlans, exercises }
     <>
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-3xl font-bold">Trainingspläne</h1>
-          <p className="text-slate-300">Planen Sie ein strukturiertes {sport} Training</p>
+          <h1 className="text-3xl">Trainingspläne</h1>
+          <p className="text-muted-foreground">Planen Sie ein strukturiertes {sport} Training</p>
         </div>
         <div className="flex gap-3">
-          <Button className="bg-blue-600" onClick={() => setOpen(true)}>
+          <Button onClick={() => setOpen(true)}>
             <Plus className="mr-2 h-4 w-4" /> Neuer Plan
           </Button>
         </div>
       </div>
 
-      <Input placeholder="Trainingspläne durchsuchen..." value={search} onChange={(e) => setSearch(e.target.value)} className="max-w-md mb-10 text-black" />
+      <Input placeholder="Trainingspläne durchsuchen..." value={search} onChange={(e) => setSearch(e.target.value)} className="max-w-md mb-10" />
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {[...plans]
@@ -106,23 +106,23 @@ function PlansPage({ sport, setPage, setActivePlan, plans, setPlans, exercises }
             return new Date(a.date).getTime() - new Date(b.date).getTime();
           })
           .filter((p) => p.name.toLowerCase().includes(search.toLowerCase())).map((plan) => (
-          <Card key={plan.id} className={`bg-slate-100 text-slate-900 rounded-2xl shadow-lg ${plan.date && new Date(plan.date) < new Date(new Date().toDateString()) ? "border border-red-400 shadow-sm shadow-red-400/40" : ""}`}>
-            <CardContent className="p-6 space-y-4">
-              <h2 className="text-xl font-bold">{plan.name}</h2>
+          <Card key={plan.id} className={plan.date && new Date(plan.date) < new Date(new Date().toDateString()) ? "border-red-400 shadow-sm shadow-red-400/40" : ""}>
+            <CardContent className="space-y-4">
+              <h2 className="text-xl">{plan.name}</h2>
               <div className="flex gap-3 text-sm">
-                <span className="flex items-center gap-1 bg-blue-100 text-blue-600 px-3 py-1 rounded-full">👥 {plan.exercisesCount} Übungen</span>
-                <span className="flex items-center gap-1 bg-slate-200 text-slate-600 px-3 py-1 rounded-full">⏱ {plan.duration}</span>
+                <span className="flex items-center gap-1 bg-primary-soft text-primary px-3 py-1 rounded-full">👥 {plan.exercisesCount} Übungen</span>
+                <span className="flex items-center gap-1 bg-surface-2 text-muted-foreground px-3 py-1 rounded-full">⏱ {plan.duration}</span>
                 {plan.date && (
-                  <span className="flex items-center gap-1 bg-slate-200 text-slate-600 px-3 py-1 rounded-full">📅 {plan.date}</span>
+                  <span className="flex items-center gap-1 bg-surface-2 text-muted-foreground px-3 py-1 rounded-full">📅 {plan.date}</span>
                 )}
               </div>
               <div className="text-sm">
                 <p className="font-medium mb-1">Beschreibung:</p>
-                <p className="text-slate-600">{plan.description}</p>
+                <p className="text-muted-foreground">{plan.description}</p>
               </div>
               <div className="text-sm">
                 <p className="font-medium mb-1">Zielgruppe:</p>
-                <p className="text-blue-600">{plan.target}</p>
+                <p className="text-highlight">{plan.target}</p>
               </div>
               <div className="flex gap-3 pt-4">
                 <Button
@@ -134,14 +134,16 @@ function PlansPage({ sport, setPage, setActivePlan, plans, setPlans, exercises }
                   }}
                 >👁 Anzeigen</Button>
                 <Button
-                  variant="ghost"
+                  variant="outline"
+                  size="icon"
                   onClick={() => {
                     setEditPlan(plan);
                     setOpen(true);
                   }}
                 >✏️</Button>
                 <Button
-                  variant="ghost"
+                  variant="outline"
+                  size="icon"
                   onClick={(e) => {
                     e.stopPropagation();
                     setConfirmPlan(plan);
@@ -175,12 +177,13 @@ function PlansPage({ sport, setPage, setActivePlan, plans, setPlans, exercises }
 
       {confirmPlan && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-          <div className="bg-white text-black rounded-xl p-6 w-80 text-center space-y-4">
-            <h2 className="text-lg font-semibold">Löschen ?</h2>
+          <div className="bg-card text-card-foreground border border-border rounded-3xl p-6 w-80 text-center space-y-4">
+            <h2 className="text-lg">Löschen ?</h2>
             <div className="flex justify-center gap-4 pt-2">
               <Button variant="outline" onClick={() => setConfirmPlan(null)}>Abbrechen</Button>
               <Button
-                className="bg-red-600"
+                variant="ghost"
+                className="bg-red-600 text-white hover:bg-red-700"
                 onClick={() => {
                   setPlans((prev) => prev.filter((p) => p.id !== confirmPlan.id));
                   setConfirmPlan(null);
@@ -212,10 +215,10 @@ function ExercisesPage({ exercises, setExercises, sport }) {
     <>
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-3xl font-bold">Übungen verwalten</h1>
-          <p className="text-slate-300">Übersicht Ihrer Übungen</p>
+          <h1 className="text-3xl">Übungen verwalten</h1>
+          <p className="text-muted-foreground">Übersicht Ihrer Übungen</p>
         </div>
-        <Button className="bg-blue-600" onClick={() => setOpen(true)}>
+        <Button onClick={() => setOpen(true)}>
           <Plus className="mr-2 h-4 w-4" /> Neue Übung
         </Button>
       </div>
@@ -224,43 +227,45 @@ function ExercisesPage({ exercises, setExercises, sport }) {
         placeholder="Übungen durchsuchen..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="max-w-md mb-10 text-black"
+        className="max-w-md mb-10"
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {exercises
           .filter((e) => e.name.toLowerCase().includes(search.toLowerCase()))
           .map((ex) => (
-            <Card key={ex.id} className="bg-slate-100 text-slate-900 rounded-2xl shadow-lg">
-              <CardContent className="p-6 space-y-4">
-                <h2 className="text-xl font-bold">{ex.name}</h2>
+            <Card key={ex.id}>
+              <CardContent className="space-y-4">
+                <h2 className="text-xl">{ex.name}</h2>
 
                 <div className="flex gap-3 text-sm flex-wrap">
-                  <span className="flex items-center gap-1 bg-blue-100 text-blue-600 px-3 py-1 rounded-full">🏆 {sport}</span>
-                  <span className="flex items-center gap-1 bg-green-100 text-green-700 px-3 py-1 rounded-full">{ex.level}</span>
-                  <span className="flex items-center gap-1 bg-slate-200 text-slate-600 px-3 py-1 rounded-full">⏱ {ex.duration} Min.</span>
+                  <span className="flex items-center gap-1 bg-primary-soft text-primary px-3 py-1 rounded-full">🏆 {sport}</span>
+                  <span className="flex items-center gap-1 bg-highlight/15 text-highlight px-3 py-1 rounded-full">{ex.level}</span>
+                  <span className="flex items-center gap-1 bg-surface-2 text-muted-foreground px-3 py-1 rounded-full">⏱ {ex.duration} Min.</span>
                 </div>
 
                 <div className="text-sm">
                   <p className="font-medium mb-1">Beschreibung:</p>
-                  <p className="text-slate-600">{ex.description}</p>
+                  <p className="text-muted-foreground">{ex.description}</p>
                 </div>
 
-                <div className="text-sm flex items-start gap-2 text-blue-700">
+                <div className="text-sm flex items-start gap-2 text-highlight">
                   <Target size={16} className="mt-0.5" />
                   <span>{ex.goal}</span>
                 </div>
 
                 <div className="flex gap-4 pt-4">
                   <Button
-                    variant="ghost"
+                    variant="outline"
+                    size="icon"
                     onClick={() => {
                       setEditExercise(ex);
                       setOpen(true);
                     }}
                   >✏️</Button>
                   <Button
-                    variant="ghost"
+                    variant="outline"
+                    size="icon"
                     onClick={() => setConfirmExercise(ex)}
                   >🗑</Button>
                 </div>
@@ -285,12 +290,13 @@ function ExercisesPage({ exercises, setExercises, sport }) {
 
       {confirmExercise && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-          <div className="bg-white text-black rounded-xl p-6 w-80 text-center space-y-4">
-            <h2 className="text-lg font-semibold">Löschen ?</h2>
+          <div className="bg-card text-card-foreground border border-border rounded-3xl p-6 w-80 text-center space-y-4">
+            <h2 className="text-lg">Löschen ?</h2>
             <div className="flex justify-center gap-4 pt-2">
               <Button variant="outline" onClick={() => setConfirmExercise(null)}>Abbrechen</Button>
               <Button
-                className="bg-red-600"
+                variant="ghost"
+                className="bg-red-600 text-white hover:bg-red-700"
                 onClick={() => {
                   setExercises((prev) => prev.filter((e) => e.id !== confirmExercise.id));
                   setConfirmExercise(null);
@@ -326,26 +332,26 @@ function ExerciseModal({ onClose, onSave, sport, editExercise = null }) {
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-      <div className="bg-white text-black w-full max-w-2xl rounded-xl overflow-hidden">
-        <div className="bg-blue-600 text-white px-6 py-4 flex justify-between items-center">
-          <h2 className="text-lg font-semibold">{editExercise ? "✏️ Übung bearbeiten" : `+ Neue ${sport}-Übung hinzufügen`}</h2>
-          <button onClick={onClose}>✕</button>
+      <div className="bg-card text-card-foreground border border-border w-full max-w-2xl rounded-3xl overflow-hidden">
+        <div className="bg-[image:linear-gradient(135deg,var(--color-primary),var(--color-primary-dark))] text-white px-6 py-4 flex justify-between items-center">
+          <h2 className="text-lg">{editExercise ? "✏️ Übung bearbeiten" : `+ Neue ${sport}-Übung hinzufügen`}</h2>
+          <button onClick={onClose} className="text-white/80 hover:text-white">✕</button>
         </div>
         <div className="p-6 space-y-4">
           <Input defaultValue={sport} disabled />
           <Input placeholder="Übungsname" value={name} onChange={(e) => setName(e.target.value)} />
-          <textarea className="w-full border rounded-md p-2" placeholder="Kurze Beschreibung der Übung..." value={description} onChange={(e) => setDescription(e.target.value)} />
+          <textarea className="w-full rounded-2xl border border-input bg-card p-3 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" placeholder="Kurze Beschreibung der Übung..." value={description} onChange={(e) => setDescription(e.target.value)} />
           <Input placeholder="Ziel der Übung" value={goal} onChange={(e) => setGoal(e.target.value)} />
           <div className="flex gap-4">
             <Input type="number" value={duration} onChange={(e) => setDuration(Number(e.target.value))} />
-            <select className="w-full border rounded-md p-2" value={level} onChange={(e) => setLevel(e.target.value)}>
+            <select className="w-full rounded-2xl border border-input bg-card p-3 text-sm text-foreground" value={level} onChange={(e) => setLevel(e.target.value)}>
               <option>Anfänger</option>
               <option>Fortgeschritten</option>
             </select>
           </div>
           <div className="flex justify-end gap-3 pt-4">
             <Button variant="outline" onClick={onClose}>Abbrechen</Button>
-            <Button className="bg-blue-600" onClick={handleSave}>{editExercise ? "Änderungen speichern" : "Übung hinzufügen"}</Button>
+            <Button onClick={handleSave}>{editExercise ? "Änderungen speichern" : "Übung hinzufügen"}</Button>
           </div>
         </div>
       </div>
@@ -404,44 +410,44 @@ function TrainingPlanModal({ onClose, onCreate, exercises, sport, editPlan = nul
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-      <div className="bg-white text-black w-full max-w-3xl rounded-xl overflow-hidden">
-        <div className="bg-blue-600 text-white px-6 py-4 flex justify-between items-center">
-          <h2 className="text-lg font-semibold">
+      <div className="bg-card text-card-foreground border border-border w-full max-w-3xl rounded-3xl overflow-hidden">
+        <div className="bg-[image:linear-gradient(135deg,var(--color-primary),var(--color-primary-dark))] text-white px-6 py-4 flex justify-between items-center">
+          <h2 className="text-lg">
             {editPlan ? "✏️ Trainingsplan bearbeiten" : `+ Neuen ${sport}-Trainingsplan erstellen`}
           </h2>
-          <button onClick={onClose}>✕</button>
+          <button onClick={onClose} className="text-white/80 hover:text-white">✕</button>
         </div>
 
         <div className="p-6 space-y-5">
           <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Planname" />
-          <textarea value={description} onChange={(e) => setDescription(e.target.value)} className="w-full border rounded-md p-2" placeholder="Beschreibung" />
+          <textarea value={description} onChange={(e) => setDescription(e.target.value)} className="w-full rounded-2xl border border-input bg-card p-3 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" placeholder="Beschreibung" />
           <Input value={target} onChange={(e) => setTarget(e.target.value)} placeholder="Zielgruppe" />
 
           <div className="relative">
             {!date && (
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">Datum</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none">Datum</span>
             )}
             <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="pl-16" />
           </div>
 
           <div className="space-y-2">
             <h3 className="font-semibold">Ausgewählte Übungen (in Trainingsreihenfolge)</h3>
-            <p className="text-sm text-slate-500">💡 Ziehen Sie die Übungen, um die Reihenfolge zu ändern</p>
+            <p className="text-sm text-muted-foreground">💡 Ziehen Sie die Übungen, um die Reihenfolge zu ändern</p>
 
-            <div className="border rounded-lg divide-y">
+            <div className="border border-border rounded-2xl divide-y divide-border overflow-hidden">
               {selectedExercises.map((id, index) => {
                 const ex = exercises.find((e) => e.id === id);
                 if (!ex) return null;
                 return (
                   <div key={id} className="flex items-center gap-3 p-3">
-                    <div className="flex flex-col">
-                      <button onClick={() => moveExercise(index, -1)}>↑</button>
-                      <button onClick={() => moveExercise(index, 1)}>↓</button>
+                    <div className="flex flex-col text-muted-foreground">
+                      <button onClick={() => moveExercise(index, -1)} className="hover:text-foreground">↑</button>
+                      <button onClick={() => moveExercise(index, 1)} className="hover:text-foreground">↓</button>
                     </div>
-                    <span className="w-6 h-6 flex items-center justify-center rounded-full bg-blue-100 text-blue-600 font-semibold">{index + 1}</span>
+                    <span className="w-6 h-6 flex items-center justify-center rounded-full bg-primary-soft text-primary font-semibold">{index + 1}</span>
                     <span className="flex-1 font-medium">{ex.name}</span>
-                    <span className="text-sm">{ex.duration} Min.</span>
-                    <button className="text-red-500" onClick={() => removeExercise(id)}>✕</button>
+                    <span className="text-sm text-muted-foreground">{ex.duration} Min.</span>
+                    <button className="text-red-400 hover:text-red-300" onClick={() => removeExercise(id)}>✕</button>
                   </div>
                 );
               })}
@@ -450,11 +456,11 @@ function TrainingPlanModal({ onClose, onCreate, exercises, sport, editPlan = nul
 
           <div className="space-y-2">
             <h3 className="font-semibold">Verfügbare Übungen hinzufügen</h3>
-            <div className="border rounded-lg divide-y">
+            <div className="border border-border rounded-2xl divide-y divide-border overflow-hidden">
               {exercises
                 .filter((e) => !selectedExercises.includes(e.id))
                 .map((ex) => (
-                  <button key={ex.id} onClick={() => addExercise(ex.id)} className="w-full text-left p-3 hover:bg-slate-100">
+                  <button key={ex.id} onClick={() => addExercise(ex.id)} className="w-full text-left p-3 hover:bg-accent">
                     {ex.name} · {ex.duration} Min.
                   </button>
                 ))}
@@ -463,7 +469,7 @@ function TrainingPlanModal({ onClose, onCreate, exercises, sport, editPlan = nul
 
           <div className="flex justify-end gap-3 pt-4">
             <Button variant="outline" onClick={onClose}>Abbrechen</Button>
-            <Button className="bg-blue-600" onClick={createPlan}>
+            <Button onClick={createPlan}>
               {editPlan ? "Änderungen speichern" : "Trainingsplan erstellen"}
             </Button>
           </div>
@@ -503,27 +509,27 @@ function PlanDetailPage({ plan, onBack }) {
   return (
     <>
       <div className="flex items-center gap-4 mb-6">
-        <Button variant="outline" className="text-black" onClick={onBack}>← Zurück</Button>
-        <h1 className="text-3xl font-bold">{plan?.name}</h1>
+        <Button variant="outline" onClick={onBack}>← Zurück</Button>
+        <h1 className="text-3xl">{plan?.name}</h1>
       </div>
 
       <div className="space-y-6 max-w-3xl">
         {plan?.exercises.map((ex, i) => (
-          <Card key={ex.id} className="bg-slate-100 text-slate-900 rounded-2xl shadow-lg">
-            <CardContent className="p-6 space-y-4">
+          <Card key={ex.id}>
+            <CardContent className="space-y-4">
               <div className="flex justify-between items-start">
                 <div>
-                  <h2 className="text-xl font-semibold"><span className="text-blue-600 mr-2">{i + 1}</span>{ex.name}</h2>
+                  <h2 className="text-xl"><span className="text-primary mr-2">{i + 1}</span>{ex.name}</h2>
                   <div className="flex gap-2 mt-2 text-sm">
-                    <span className="px-3 py-1 rounded-full bg-green-100 text-green-700">{ex.level}</span>
-                    <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-700">{ex.duration} Min</span>
+                    <span className="px-3 py-1 rounded-full bg-highlight/15 text-highlight">{ex.level}</span>
+                    <span className="px-3 py-1 rounded-full bg-surface-2 text-muted-foreground">{ex.duration} Min</span>
                   </div>
                 </div>
-                <Button className="bg-green-600" onClick={() => startExercise(ex)}>▶ Start</Button>
+                <Button variant="accent" onClick={() => startExercise(ex)}>▶ Start</Button>
               </div>
 
-              <p className="text-slate-600">{ex.description}</p>
-              <p className="text-slate-600">🎯 {ex.goal}</p>
+              <p className="text-muted-foreground">{ex.description}</p>
+              <p className="text-muted-foreground">🎯 {ex.goal}</p>
             </CardContent>
           </Card>
         ))}
@@ -531,8 +537,8 @@ function PlanDetailPage({ plan, onBack }) {
 
       {activeExercise && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-          <div className="bg-white text-black rounded-2xl p-8 w-80 text-center space-y-4">
-            <h2 className="text-xl font-bold">{activeExercise.name}</h2>
+          <div className="bg-card text-card-foreground border border-border rounded-3xl p-8 w-80 text-center space-y-4">
+            <h2 className="text-xl">{activeExercise.name}</h2>
             <div className="text-5xl font-mono">{format(timeLeft)}</div>
             <div className="flex gap-3 justify-center">
               <Button onClick={() => setRunning((r) => !r)}>{running ? "Pause" : "Start"}</Button>
@@ -560,35 +566,35 @@ function StatsPage({ plans, exercises, sport }) {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold">📊 Statistiken & Auswertungen</h1>
-        <p className="text-slate-300">Überblick über Ihre Trainingsdaten</p>
+        <h1 className="text-3xl">📊 Statistiken & Auswertungen</h1>
+        <p className="text-muted-foreground">Überblick über Ihre Trainingsdaten</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card className="bg-blue-600 text-white"><CardContent className="p-6"><p>Trainingspläne</p><p className="text-3xl font-bold">{totalPlans}</p></CardContent></Card>
-        <Card className="bg-green-600 text-white"><CardContent className="p-6"><p>Anzahl der Übungen</p><p className="text-3xl font-bold">{totalExercises}</p></CardContent></Card>
-        <Card className="bg-orange-500 text-white"><CardContent className="p-6"><p>Ø Trainingsdauer</p><p className="text-3xl font-bold">{avgDuration} Min</p></CardContent></Card>
-        <Card className="bg-purple-600 text-white"><CardContent className="p-6"><p>Sportart</p><p className="text-2xl font-bold">{sport}</p></CardContent></Card>
+        <Card className="bg-primary text-primary-foreground border-transparent"><CardContent><p>Trainingspläne</p><p className="text-3xl font-bold">{totalPlans}</p></CardContent></Card>
+        <Card className="bg-highlight text-background border-transparent"><CardContent><p>Anzahl der Übungen</p><p className="text-3xl font-bold">{totalExercises}</p></CardContent></Card>
+        <Card className="bg-primary-dark text-primary-foreground border-transparent"><CardContent><p>Ø Trainingsdauer</p><p className="text-3xl font-bold">{avgDuration} Min</p></CardContent></Card>
+        <Card className="bg-highlight-dark text-primary-foreground border-transparent"><CardContent><p>Sportart</p><p className="text-2xl font-bold">{sport}</p></CardContent></Card>
       </div>
 
-      <Card className="bg-slate-100 text-slate-900 rounded-2xl">
-        <CardContent className="p-6">
-          <h2 className="text-xl font-semibold mb-4">Übungen nach Schwierigkeitsgrad</h2>
+      <Card>
+        <CardContent>
+          <h2 className="text-xl mb-4">Übungen nach Schwierigkeitsgrad</h2>
           {Object.entries(levelCount).map(([level, count]) => (
-            <div key={level} className="flex justify-between border-b py-2">
+            <div key={level} className="flex justify-between border-b border-border py-2">
               <span>{level}</span>
-              <span>{count}</span>
+              <span className="text-muted-foreground">{count}</span>
             </div>
           ))}
         </CardContent>
       </Card>
 
       {/* Meist genutzte Übungen */}
-      <Card className="bg-slate-100 text-slate-900 rounded-2xl">
-        <CardContent className="p-6">
-          <h2 className="text-xl font-semibold mb-4">Meist genutzte Übungen</h2>
+      <Card>
+        <CardContent>
+          <h2 className="text-xl mb-4">Meist genutzte Übungen</h2>
           {plans.length === 0 && (
-            <p className="text-slate-500 text-sm">Noch keine Daten vorhanden.</p>
+            <p className="text-muted-foreground text-sm">Noch keine Daten vorhanden.</p>
           )}
           {plans.length > 0 && (() => {
             const usage = {};
@@ -601,7 +607,7 @@ function StatsPage({ plans, exercises, sport }) {
             const entries = Object.entries(usage);
             const total = entries.reduce((a, [, c]) => a + c, 0);
             let acc = 0;
-            const colors = ["#2563eb", "#16a34a", "#ea580c", "#7c3aed", "#0f766e"];
+            const colors = ["#4a8fde", "#54d4f8", "#818cf8", "#22d3ee", "#1657a3"];
 
             const gradient = entries
               .map(([, count], i) => {
@@ -652,14 +658,14 @@ function SettingsPage({ sport, setSport }) {
   return (
     <div className="space-y-6 max-w-4xl">
       <div>
-        <h1 className="text-3xl font-bold flex items-center gap-2">⚙️ Einstellungen</h1>
-        <p className="text-slate-300">Passen Sie Ihr Trainerprofil an</p>
+        <h1 className="text-3xl flex items-center gap-2">⚙️ Einstellungen</h1>
+        <p className="text-muted-foreground">Passen Sie Ihr Trainerprofil an</p>
       </div>
 
-      <Card className="bg-slate-100 text-slate-900 rounded-2xl">
-        <CardContent className="p-6 space-y-4">
-          <div className="flex items-center gap-2 text-xl font-semibold">🏆 Sportart</div>
-          <p className="text-slate-600">Wählen Sie die Sportart, die Sie trainieren</p>
+      <Card>
+        <CardContent className="space-y-4">
+          <div className="flex items-center gap-2 text-xl font-display font-extrabold">🏆 Sportart</div>
+          <p className="text-muted-foreground">Wählen Sie die Sportart, die Sie trainieren</p>
 
           <Input placeholder="z.B. Fußball, Basketball..." value={search} onChange={(e) => setSearch(e.target.value)} />
 
@@ -668,7 +674,7 @@ function SettingsPage({ sport, setSport }) {
               <button
                 key={s}
                 onClick={() => setSport(s)}
-                className={`px-4 py-3 rounded-xl text-sm font-medium transition border ${sport === s ? "bg-blue-600 text-white" : "bg-white hover:bg-slate-100"}`}
+                className={`px-4 py-3 rounded-2xl text-sm font-medium transition border ${sport === s ? "bg-[image:linear-gradient(135deg,var(--color-primary),var(--color-primary-dark))] text-white border-transparent shadow-[0_10px_25px_rgba(74,143,222,0.25)]" : "bg-card border-border text-foreground hover:bg-accent"}`}
               >{s}</button>
             ))}
           </div>
@@ -680,7 +686,14 @@ function SettingsPage({ sport, setSport }) {
 
 function SidebarItem({ icon, label, active, onClick }) {
   return (
-    <div onClick={onClick} className={`flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer transition ${active ? "bg-blue-600" : "hover:bg-slate-800"}`}>
+    <div
+      onClick={onClick}
+      className={`flex items-center gap-3 px-4 py-2 rounded-2xl cursor-pointer transition ${
+        active
+          ? "bg-[image:linear-gradient(135deg,var(--color-primary),var(--color-primary-dark))] text-white shadow-[0_10px_25px_rgba(74,143,222,0.25)]"
+          : "text-muted-foreground hover:bg-accent hover:text-foreground"
+      }`}
+    >
       {icon}
       <span>{label}</span>
     </div>

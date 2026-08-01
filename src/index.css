@@ -1,28 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --color-border: hsl(214 32% 91%);
-  --color-input: hsl(214 32% 91%);
-  --color-ring: hsl(221 83% 53%);
-  --color-background: hsl(0 0% 100%);
-  --color-foreground: hsl(222 47% 11%);
-  --color-primary: hsl(221 83% 53%);
-  --color-primary-foreground: hsl(210 40% 98%);
-  --color-card: hsl(0 0% 100%);
-  --color-card-foreground: hsl(222 47% 11%);
-  --color-accent: hsl(210 40% 96%);
-  --color-accent-foreground: hsl(222 47% 11%);
-  --color-muted-foreground: hsl(215 16% 47%);
+  --font-display: "Baloo 2", "Plus Jakarta Sans", sans-serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+
+  /* Base surfaces — dark, blue-tinted (hue-rotated from the green reference palette) */
+  --color-background: #0e1117;
+  --color-bg-soft: #171f23;
+  --color-foreground: #eef4f7;
+  --color-muted-foreground: #a3b4c2;
+
+  --color-card: #1e282f;
+  --color-card-foreground: #eef4f7;
+  --color-surface-2: #273640;
+  --color-border: #354854;
+  --color-input: #354854;
+  --color-ring: #4a8fde;
+
+  /* Primary — blue (replaces the reference's green) */
+  --color-primary: #4a8fde;
+  --color-primary-dark: #1657a3;
+  --color-primary-soft: #1c2433;
+  --color-primary-foreground: #ffffff;
+
+  /* Accent — cyan, the lighter "pop" tone (replaces the reference's lime) */
+  --color-highlight: #54d4f8;
+  --color-highlight-dark: #0892c4;
+  --color-sun: #81e4f8;
+
+  /* Neutral hover surface (shadcn "accent" slot) */
+  --color-accent: #273640;
+  --color-accent-foreground: #eef4f7;
+
+  --color-destructive: #f87171;
 }
 
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 body {
   margin: 0;
+  font-family: var(--font-sans);
+  background: var(--color-background);
+  color: var(--color-foreground);
 }
 
 #root {
   min-height: 100svh;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 800;
 }
